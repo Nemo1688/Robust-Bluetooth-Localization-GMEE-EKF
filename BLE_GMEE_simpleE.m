@@ -1,4 +1,4 @@
-% 藍芽定位系統 GMEE-AEKF 模擬（採用 GPS GMEE 適應性演算法）
+% 藍芽定位系統 GMEE-AEKF 模擬
 % Bluetooth Localization with Adaptive GMEE-EKF + LS baseline
 
 clear all; close all; clc;
@@ -137,40 +137,6 @@ end
 xlabel('時間步', 'FontSize', 12);
 ylabel('RSSI (dBm)', 'FontSize', 12);
 title('藍芽RSSI信號', 'FontSize', 14, 'FontWeight', 'bold');
-legend('Location', 'best');
-grid on;
-
-% 子圖4: Alpha 參數演變（選擇幾個代表性時間步）
-subplot(3, 2, 4);
-hold on;
-sample_steps = [1, 50, 100, 150, 200];
-colors_alpha = lines(length(sample_steps));
-for idx = 1:length(sample_steps)
-    step = sample_steps(idx);
-    if step <= n_steps && ~isempty(alpha_history_all{step})
-        plot(alpha_history_all{step}, 'Color', colors_alpha(idx,:), ...
-            'LineWidth', 1.5, 'DisplayName', sprintf('步驟 %d', step));
-    end
-end
-xlabel('迭代次數', 'FontSize', 12);
-ylabel('Alpha 參數', 'FontSize', 12);
-title('Alpha 參數在不同時間步的演變', 'FontSize', 14, 'FontWeight', 'bold');
-legend('Location', 'best');
-grid on;
-
-% 子圖5: Beta 參數演變
-subplot(3, 2, 5);
-hold on;
-for idx = 1:length(sample_steps)
-    step = sample_steps(idx);
-    if step <= n_steps && ~isempty(beta_history_all{step})
-        plot(beta_history_all{step}, 'Color', colors_alpha(idx,:), ...
-            'LineWidth', 1.5, 'DisplayName', sprintf('步驟 %d', step));
-    end
-end
-xlabel('迭代次數', 'FontSize', 12);
-ylabel('Beta 參數', 'FontSize', 12);
-title('Beta 參數在不同時間步的演變', 'FontSize', 14, 'FontWeight', 'bold');
 legend('Location', 'best');
 grid on;
 
@@ -567,4 +533,5 @@ function estimate = get_estimate(gmee_ekf)
     for i = 1:gmee_ekf.n_components
         estimate = estimate + gmee_ekf.weights(i) * gmee_ekf.means(i, :);
     end
+
 end
